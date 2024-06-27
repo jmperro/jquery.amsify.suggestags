@@ -1,7 +1,6 @@
 /**
  * Amsify Suggestags
- * Repo: https://github.com/jmperro/jquery.amsify.suggestags
- * Original repo:https://github.com/amsify42/jquery.amsify.suggestags
+ * https://github.com/amsify42/jquery.amsify.suggestags
  */
 
 var AmsifySuggestags;
