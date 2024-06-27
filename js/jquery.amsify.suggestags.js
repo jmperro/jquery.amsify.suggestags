@@ -1,6 +1,7 @@
 /**
  * Amsify Suggestags
- * https://github.com/amsify42/jquery.amsify.suggestags
+ * Repo: https://github.com/jmperro/jquery.amsify.suggestags
+ * Original repo:https://github.com/amsify42/jquery.amsify.suggestags
  */
 
 var AmsifySuggestags;
@@ -13,7 +14,7 @@ var AmsifySuggestags;
 	}
 }
 (function($, window, document, undefined) {
-	
+
 	AmsifySuggestags = function(selector) {
 		this.selector = selector;
 		this.settings = {
@@ -79,7 +80,7 @@ var AmsifySuggestags;
 			plusTag 	  : null
 		};
 		this.isRequired = false;
-		this.ajaxActive = false; 
+		this.ajaxActive = false;
 		this.tagNames   = [];
 		this.delayTimer = 0;
 		this.blurTgItems= null;
@@ -90,7 +91,7 @@ var AmsifySuggestags;
 		* @type {object}
 		*/
 		_settings : function(settings) {
-			this.settings = $.extend(true, {}, this.settings, settings);      
+			this.settings = $.extend(true, {}, this.settings, settings);
 		},
 
 		_setMethod : function(method) {
@@ -183,6 +184,43 @@ var AmsifySuggestags;
 				}
 				_self.checkPlusAfter(true);
 			});
+
+			// When input loses focus add a tag if has a value
+			$(this.selectors.sTagsInput).blur(function(e){
+				if (_self.getValue(value) !== '') {
+					var value = $.trim($(this).val().replace(/,/g , ''));
+
+					if (value != '') {
+						$(this).val('');
+						_self.addTag(_self.getValue(value));
+						if(_self.settings.showAllSuggestions) {
+							_self.suggestWhiteList('', 0, true);
+						}
+					}
+				}
+			});
+
+			// When tab key is pressed add a tag if has a value
+			$(this.selectors.sTagsInput).keydown(function(e){
+				var keycode = (e.keyCode ? e.keyCode : e.which);
+
+				if (keycode == '9') {
+					if (_self.getValue(value) !== '') {
+						var value = $.trim($(this).val().replace(/,/g , ''));
+
+						if (value != '') {
+							e.preventDefault();
+
+							$(this).val('');
+							_self.addTag(_self.getValue(value));
+							if(_self.settings.showAllSuggestions) {
+								_self.suggestWhiteList('', 0, true);
+							}
+						}
+					}
+				}
+			});
+
 			$(this.selectors.sTagsInput).keyup(function(e){
 				var keycode = (e.keyCode ? e.keyCode : e.which);
 				var key 	= '';
@@ -276,7 +314,7 @@ var AmsifySuggestags;
 						return false;
 					}
 					else if(item == value) {
-						return false; 
+						return false;
 					}
 				});
 				return tag;
@@ -294,7 +332,7 @@ var AmsifySuggestags;
 						return false;
 					}
 					else if(item.toString().toLowerCase() == lower) {
-						return false; 
+						return false;
 					}
 				});
 				return value;
@@ -526,7 +564,7 @@ var AmsifySuggestags;
 			if (typeof value === "string" && this.settings.trimValue) {
 				value = $.trim(value);
 			}
-			
+
 			// lowercase and dash
 			if (typeof value === "string" && this.settings.lowercase && this.settings.dashspaces) {
 				value = value.replace(/\s+/g, '-').toLowerCase();
@@ -606,7 +644,7 @@ var AmsifySuggestags;
 								_self.settings.colors[key] = item.color;
 							}
 							return false;
-						}  
+						}
 					} else if(item.toString().toLowerCase() == lower) {
 						itemKey = key;
 						return false;
@@ -699,7 +737,7 @@ var AmsifySuggestags;
 			if($tagItem) {
 				background = (this.settings.backgrounds[itemKey] !== undefined)? this.settings.backgrounds[itemKey]: null;
 				if(background !== null) {
-					$tagItem.css('background', ''); 
+					$tagItem.css('background', '');
 				}
 				$tagItem.addClass('flash');
 				setTimeout(function(){
